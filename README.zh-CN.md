@@ -6,27 +6,27 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/tourze/enum-extra.svg?style=flat-square)](https://packagist.org/packages/tourze/enum-extra)
 [![License](https://img.shields.io/packagist/l/tourze/enum-extra.svg?style=flat-square)](https://packagist.org/packages/tourze/enum-extra)
 
-A PHP package that enhances PHP 8.1+ enums with additional functionality, providing commonly used enum extensions.
+一个增强 PHP 8.1+ 枚举功能的扩展包，提供了一系列实用的枚举工具和功能。
 
-## Features
+## 特性
 
-- Convert enum cases to select options with custom labels
-- Environment-based option filtering with `enum-display:{enum}-{value}`
-- Array conversion utilities for easy data transformation
-- Interface support for flexible implementation
-- Type-safe enum operations
+- 支持将枚举转换为下拉选项并自定义标签
+- 通过 `enum-display:{enum}-{value}` 进行环境变量过滤
+- 提供数组转换工具，便于数据转换
+- 灵活的接口支持
+- 类型安全的枚举操作
 
-## Requirements
+## 环境要求
 
-- PHP 8.1 or higher
+- PHP 8.1 或更高版本
 
-## Installation
+## 安装
 
 ```bash
 composer require tourze/enum-extra
 ```
 
-## Quick Start
+## 快速开始
 
 ```php
 use Tourze\EnumExtra\Itemable;
@@ -52,36 +52,36 @@ enum Status: string implements Labelable, Itemable, Selectable
     }
 }
 
-// Generate select options
+// 生成下拉选项
 $options = Status::genOptions();
 
-// Convert single case to array
+// 转换单个枚举为数组
 $array = Status::ACTIVE->toArray();
 ```
 
-## Available Interfaces
+## 可用接口
 
-- `Labelable`: For implementing custom labels
-- `Itemable`: For select item conversion
-- `Selectable`: For options generation
+- `Labelable`: 用于实现自定义标签
+- `Itemable`: 用于下拉选项转换
+- `Selectable`: 用于选项生成
 
-## Features in Detail
+## 功能详解
 
-### Select Options Generation
+### 下拉选项生成
 
-- Convert enum cases to select options format
-- Support for custom labels
-- Environment-based filtering using `enum-display:{enum}-{value}`
+- 将枚举转换为下拉选项格式
+- 支持自定义标签
+- 使用 `enum-display:{enum}-{value}` 进行环境变量过滤
 
-### Array Conversion
+### 数组转换
 
-- Convert enum cases to array format
-- Includes both value and label
+- 将枚举转换为数组格式
+- 包含值和标签信息
 
-## Contributing
+## 贡献
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+详情请参见 [CONTRIBUTING](CONTRIBUTING.md)。
 
-## License
+## 开源协议
 
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
+本项目采用 MIT 协议。详情请参见 [License File](LICENSE)。
