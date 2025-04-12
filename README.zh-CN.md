@@ -6,7 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/tourze/enum-extra.svg?style=flat-square)](https://packagist.org/packages/tourze/enum-extra)
 [![License](https://img.shields.io/packagist/l/tourze/enum-extra.svg?style=flat-square)](https://packagist.org/packages/tourze/enum-extra)
 
-一个增强 PHP 8.1+ 枚举功能的扩展包，提供了一系列实用的枚举工具和功能。
+一个增强 PHP 8.1+ 枚举功能的扩展包，提供了一系列实用的枚举工具和功能，便于数据处理和 UI 集成。
 
 ## 特性
 
@@ -15,6 +15,9 @@
 - 提供数组转换工具，便于数据转换
 - 灵活的接口支持
 - 类型安全的枚举操作
+- 内置布尔枚举实现及辅助方法
+- 提供树结构数据支持，便于处理层级数据
+- 标准化数据获取接口
 
 ## 环境要求
 
@@ -46,37 +49,120 @@ enum Status: string implements Labelable, Itemable, Selectable
     public function getLabel(): string
     {
         return match($this) {
-            self::ACTIVE => 'Active',
-            self::INACTIVE => 'Inactive',
+            self::ACTIVE => '激活',
+            self::INACTIVE => '未激活',
         };
     }
 }
 
 // 生成下拉选项
 $options = Status::genOptions();
+// 结果: [['label' => '激活', 'text' => '激活', 'value' => 'active', 'name' => '激活'], ...]
 
 // 转换单个枚举为数组
 $array = Status::ACTIVE->toArray();
+// 结果: ['value' => 'active', 'label' => '激活']
 ```
 
 ## 可用接口
 
-- `Labelable`: 用于实现自定义标签
-- `Itemable`: 用于下拉选项转换
-- `Selectable`: 用于选项生成
+### Labelable
+
+此接口提供了为枚举添加人类可读标签的方法。
+
+```php
+interface Labelable
+{
+    public function getLabel(): string;
+}
+```
+
+### Itemable
+
+此接口允许将枚举转换为下拉选项项目。
+
+```php
+interface Itemable
+{
+    public function toSelectItem(): array;
+}
+```
+
+### Selectable
+
+此接口提供了从枚举生成下拉选项的方法。
+
+```php
+interface Selectable
+{
+    public static function genOptions(): array;
+}
+```
+
+### SelectDataFetcher
+
+此接口标准化了下拉组件的数据获取。
+
+```php
+interface SelectDataFetcher
+{
+    public function genSelectData(): iterable;
+}
+```
+
+### TreeDataFetcher
+
+此接口提供了生成层级树形数据的方法。
+
+```php
+interface TreeDataFetcher
+{
+    public function genTreeData(): array;
+}
+```
 
 ## 功能详解
 
 ### 下拉选项生成
 
-- 将枚举转换为下拉选项格式
-- 支持自定义标签
-- 使用 `enum-display:{enum}-{value}` 进行环境变量过滤
+将枚举转换为 UI 组件可用的下拉选项格式：
+
+```php
+$options = Status::genOptions();
+```
+
+您可以使用环境变量过滤选项：
+
+```php
+// 在 .env 文件或服务器配置中
+$_ENV['enum-display:App\\Enums\\Status-inactive'] = false;
+
+// 此时 Status::genOptions() 将排除 INACTIVE 选项
+```
+
+### BoolEnum
+
+一个开箱即用的布尔枚举实现：
+
+```php
+use Tourze\EnumExtra\BoolEnum;
+
+$value = BoolEnum::YES;
+$boolValue = $value->toBool(); // true
+
+// 生成布尔选项
+$options = BoolEnum::genBoolOptions();
+// 结果: [['label' => '是', 'text' => '是', 'value' => true, 'name' => '是'], ...]
+```
 
 ### 数组转换
 
-- 将枚举转换为数组格式
-- 包含值和标签信息
+将枚举转换为数组格式，便于序列化：
+
+```php
+$array = Status::ACTIVE->toArray();
+// 结果: ['value' => 'active', 'label' => '激活']
+```
 
 ## 贡献
 

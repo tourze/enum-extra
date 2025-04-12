@@ -6,7 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/tourze/enum-extra.svg?style=flat-square)](https://packagist.org/packages/tourze/enum-extra)
 [![License](https://img.shields.io/packagist/l/tourze/enum-extra.svg?style=flat-square)](https://packagist.org/packages/tourze/enum-extra)
 
-A PHP package that enhances PHP 8.1+ enums with additional functionality, providing commonly used enum extensions.
+A PHP package that enhances PHP 8.1+ enums with additional functionality, providing commonly used enum extensions for easier data handling and UI integration.
 
 ## Features
 
@@ -15,6 +15,9 @@ A PHP package that enhances PHP 8.1+ enums with additional functionality, provid
 - Array conversion utilities for easy data transformation
 - Interface support for flexible implementation
 - Type-safe enum operations
+- Boolean enum implementation with useful helpers
+- Tree data structure support for hierarchical data
+- Data fetcher interfaces for standardized data retrieval
 
 ## Requirements
 
@@ -54,29 +57,112 @@ enum Status: string implements Labelable, Itemable, Selectable
 
 // Generate select options
 $options = Status::genOptions();
+// Result: [['label' => 'Active', 'text' => 'Active', 'value' => 'active', 'name' => 'Active'], ...]
 
 // Convert single case to array
 $array = Status::ACTIVE->toArray();
+// Result: ['value' => 'active', 'label' => 'Active']
 ```
 
 ## Available Interfaces
 
-- `Labelable`: For implementing custom labels
-- `Itemable`: For select item conversion
-- `Selectable`: For options generation
+### Labelable
+
+This interface provides a way to add human-readable labels to enum cases.
+
+```php
+interface Labelable
+{
+    public function getLabel(): string;
+}
+```
+
+### Itemable
+
+This interface allows converting enum cases to select option items.
+
+```php
+interface Itemable
+{
+    public function toSelectItem(): array;
+}
+```
+
+### Selectable
+
+This interface provides methods to generate select options from enum cases.
+
+```php
+interface Selectable
+{
+    public static function genOptions(): array;
+}
+```
+
+### SelectDataFetcher
+
+This interface standardizes data fetching for select components.
+
+```php
+interface SelectDataFetcher
+{
+    public function genSelectData(): iterable;
+}
+```
+
+### TreeDataFetcher
+
+This interface provides methods to generate hierarchical tree data.
+
+```php
+interface TreeDataFetcher
+{
+    public function genTreeData(): array;
+}
+```
 
 ## Features in Detail
 
 ### Select Options Generation
 
-- Convert enum cases to select options format
-- Support for custom labels
-- Environment-based filtering using `enum-display:{enum}-{value}`
+Convert enum cases to select options format for UI components:
+
+```php
+$options = Status::genOptions();
+```
+
+You can filter options using environment variables:
+
+```php
+// In your .env file or server configuration
+$_ENV['enum-display:App\\Enums\\Status-inactive'] = false;
+
+// Now Status::genOptions() will exclude the INACTIVE option
+```
+
+### BoolEnum
+
+A ready-to-use boolean enum implementation:
+
+```php
+use Tourze\EnumExtra\BoolEnum;
+
+$value = BoolEnum::YES;
+$boolValue = $value->toBool(); // true
+
+// Generate boolean options
+$options = BoolEnum::genBoolOptions();
+// Result: [['label' => '是', 'text' => '是', 'value' => true, 'name' => '是'], ...]
+```
 
 ### Array Conversion
 
-- Convert enum cases to array format
-- Includes both value and label
+Convert enum cases to array format for easy serialization:
+
+```php
+$array = Status::ACTIVE->toArray();
+// Result: ['value' => 'active', 'label' => 'Active']
+```
 
 ## Contributing
 
