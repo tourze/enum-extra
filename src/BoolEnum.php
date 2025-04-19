@@ -23,6 +23,25 @@ enum BoolEnum: int implements Labelable, Itemable, Selectable
         return $this->value === 1;
     }
 
+    public function getStatus(): string
+    {
+        return match ($this) {
+            self::YES => 'success',
+            self::NO => 'error',
+        };
+    }
+
+    public function toSelectItem(): array
+    {
+        return [
+            'label' => $this->getLabel(),
+            'text' => $this->getLabel(),
+            'value' => $this->value,
+            'name' => $this->getLabel(),
+            'status' => $this->getStatus(),
+        ];
+    }
+
     /**
      * 生成布尔值选项列表
      */
