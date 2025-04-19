@@ -24,6 +24,7 @@ class ItemTraitTest extends TestCase
             'text' => '是',
             'value' => 1,
             'name' => '是',
+            'status' => 'success',
         ];
         $this->assertEquals($expectedIntItem, BoolEnum::YES->toSelectItem());
     }

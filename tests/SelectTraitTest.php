@@ -48,12 +48,14 @@ class SelectTraitTest extends TestCase
                 'text' => '是',
                 'value' => 1,
                 'name' => '是',
+                'status' => 'success',
             ],
             [
                 'label' => '否',
                 'text' => '否',
                 'value' => 0,
                 'name' => '否',
+                'status' => 'error',
             ],
         ];
 

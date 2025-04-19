@@ -41,12 +41,14 @@ class SelectableTest extends TestCase
                 'text' => '是',
                 'value' => 1,
                 'name' => '是',
+                'status' => 'success',
             ],
             [
                 'label' => '否',
                 'text' => '否',
                 'value' => 0,
                 'name' => '否',
+                'status' => 'error',
             ],
         ];
 
@@ -61,12 +63,14 @@ class SelectableTest extends TestCase
                 'text' => '是',
                 'value' => true,
                 'name' => '是',
+                'status' => 'success',
             ],
             [
                 'label' => '否',
                 'text' => '否',
                 'value' => false,
                 'name' => '否',
+                'status' => 'error',
             ],
         ];
 
