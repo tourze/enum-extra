@@ -48,7 +48,6 @@ enum BoolEnum: int implements Labelable, Itemable, Selectable
     public static function genBoolOptions(): array
     {
         $arr = [];
-        /** @var Itemable|\BackedEnum $case */
         foreach (self::cases() as $case) {
             $arr[] = [
                 ...$case->toSelectItem(),
