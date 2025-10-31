@@ -1,10 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Tourze\EnumExtra\TreeDataFetcher;
 
-class TreeDataFetcherTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(TreeDataFetcher::class)]
+final class TreeDataFetcherTest extends TestCase
 {
     public function testGenTreeData(): void
     {

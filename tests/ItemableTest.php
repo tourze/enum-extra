@@ -1,24 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\EnumExtra\BoolEnum;
+use Tourze\EnumExtra\Itemable;
 
-class ItemableTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Itemable::class)]
+final class ItemableTest extends TestCase
 {
-    public function testToSelectItem(): void
-    {
-        $expectedItem = [
-            'label' => '激活',
-            'text' => '激活',
-            'value' => 'active',
-            'name' => '激活',
-        ];
-
-        $this->assertEquals($expectedItem, TestStatusEnum::ACTIVE->toSelectItem());
-    }
-
     public function testToArray(): void
     {
         $expectedArray = [

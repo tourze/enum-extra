@@ -1,22 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\EnumExtra\BoolEnum;
+use Tourze\EnumExtra\SelectTrait;
 
-class SelectTraitTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(SelectTrait::class)]
+final class SelectTraitTest extends TestCase
 {
+    /** @var array<string, mixed> */
     private array $originalEnv;
 
     protected function setUp(): void
     {
+        parent::setUp();
+        /** @var array<string, mixed> $_ENV */
         $this->originalEnv = $_ENV;
     }
 
     protected function tearDown(): void
     {
         $_ENV = $this->originalEnv;
+        parent::tearDown();
     }
 
     public function testGenOptions(): void
@@ -59,8 +71,8 @@ class SelectTraitTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($stringExpectedOptions, TestStatusEnum::genOptions());
-        $this->assertEquals($intExpectedOptions, BoolEnum::genOptions());
+        $this->assertSame($stringExpectedOptions, TestStatusEnum::genOptions());
+        $this->assertSame($intExpectedOptions, BoolEnum::genOptions());
     }
 
     public function testOptionsFiltering(): void
@@ -83,7 +95,7 @@ class SelectTraitTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($filteredOptions, TestStatusEnum::genOptions());
+        $this->assertSame($filteredOptions, TestStatusEnum::genOptions());
 
         // 再过滤一个选项
         $_ENV['enum-display:' . TestStatusEnum::class . '-pending'] = false;
@@ -97,6 +109,6 @@ class SelectTraitTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($moreFiltedOptions, TestStatusEnum::genOptions());
+        $this->assertSame($moreFiltedOptions, TestStatusEnum::genOptions());
     }
 }

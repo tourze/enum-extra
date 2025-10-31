@@ -18,6 +18,7 @@
 - 内置布尔枚举实现及辅助方法
 - 提供树结构数据支持，便于处理层级数据
 - 标准化数据获取接口
+- Badge 接口，便于与 EasyAdminBundle 集成
 
 ## 环境要求
 
@@ -121,6 +122,27 @@ interface TreeDataFetcher
 }
 ```
 
+### BadgeInterface
+
+此接口提供了与 EasyAdminBundle 集成的徽章常量。
+
+```php
+interface BadgeInterface
+{
+    public const SUCCESS = 'success';
+    public const WARNING = 'warning';
+    public const DANGER = 'danger';
+    public const INFO = 'info';
+    public const PRIMARY = 'primary';
+    public const SECONDARY = 'secondary';
+    public const LIGHT = 'light';
+    public const DARK = 'dark';
+    public const OUTLINE = 'outline';
+
+    public function getBadge(): string;
+}
+```
+
 ## 功能详解
 
 ### 下拉选项生成
@@ -162,6 +184,39 @@ $options = BoolEnum::genBoolOptions();
 ```php
 $array = Status::ACTIVE->toArray();
 // 结果: ['value' => 'active', 'label' => '激活']
+```
+
+### Badge 集成
+
+使用 Badge 接口进行 EasyAdminBundle 样式集成：
+
+```php
+use Tourze\EnumExtra\BadgeInterface;
+
+enum UserStatus: string implements BadgeInterface, Labelable
+{
+    case ACTIVE = 'active';
+    case INACTIVE = 'inactive';
+    case BANNED = 'banned';
+
+    public function getLabel(): string
+    {
+        return match($this) {
+            self::ACTIVE => '激活',
+            self::INACTIVE => '未激活',
+            self::BANNED => '已封禁',
+        };
+    }
+
+    public function getBadge(): string
+    {
+        return match($this) {
+            self::ACTIVE => self::SUCCESS,
+            self::INACTIVE => self::WARNING,
+            self::BANNED => self::DANGER,
+        };
+    }
+}
 ```
 
 ## 贡献

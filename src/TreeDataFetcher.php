@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra;
 
 /**
@@ -7,5 +9,8 @@ namespace Tourze\EnumExtra;
  */
 interface TreeDataFetcher
 {
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function genTreeData(): array;
 }

@@ -1,11 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\EnumExtra\BoolEnum;
+use Tourze\EnumExtra\Labelable;
 
-class LabelableTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Labelable::class)]
+final class LabelableTest extends TestCase
 {
     public function testEnumLabelable(): void
     {

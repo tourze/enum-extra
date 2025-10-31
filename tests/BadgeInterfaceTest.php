@@ -1,14 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use Tourze\EnumExtra\BadgeInterface;
 
-class BadgeInterfaceTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(BadgeInterface::class)]
+final class BadgeInterfaceTest extends TestCase
 {
-    public function test_constants_have_correct_values(): void
+    public function testConstantsHaveCorrectValues(): void
     {
         $this->assertSame('success', BadgeInterface::SUCCESS);
         $this->assertSame('warning', BadgeInterface::WARNING);
@@ -21,30 +27,30 @@ class BadgeInterfaceTest extends TestCase
         $this->assertSame('outline', BadgeInterface::OUTLINE);
     }
 
-    public function test_interface_has_all_expected_constants(): void
+    public function testInterfaceHasAllExpectedConstants(): void
     {
-        $reflection = new ReflectionClass(BadgeInterface::class);
+        $reflection = new \ReflectionClass(BadgeInterface::class);
         $constants = $reflection->getConstants();
 
         $expectedConstants = [
             'SUCCESS' => 'success',
-            'WARNING' => 'warning', 
+            'WARNING' => 'warning',
             'DANGER' => 'danger',
             'INFO' => 'info',
             'PRIMARY' => 'primary',
             'SECONDARY' => 'secondary',
             'LIGHT' => 'light',
             'DARK' => 'dark',
-            'OUTLINE' => 'outline'
+            'OUTLINE' => 'outline',
         ];
 
         $this->assertSame($expectedConstants, $constants);
         $this->assertCount(9, $constants);
     }
 
-    public function test_constants_are_all_strings(): void
+    public function testConstantsAreAllStrings(): void
     {
-        $reflection = new ReflectionClass(BadgeInterface::class);
+        $reflection = new \ReflectionClass(BadgeInterface::class);
         $constants = $reflection->getConstants();
 
         foreach ($constants as $constant) {
@@ -52,19 +58,19 @@ class BadgeInterfaceTest extends TestCase
         }
     }
 
-    public function test_constants_are_unique_values(): void
+    public function testConstantsAreUniqueValues(): void
     {
-        $reflection = new ReflectionClass(BadgeInterface::class);
+        $reflection = new \ReflectionClass(BadgeInterface::class);
         $constants = array_values($reflection->getConstants());
         $uniqueConstants = array_unique($constants);
 
         $this->assertSame($constants, $uniqueConstants, 'All constants should have unique values');
     }
 
-    public function test_interface_implementation_contract(): void
+    public function testInterfaceImplementationContract(): void
     {
-        $implementation = new class implements BadgeInterface {
-            public function getBadge(): string 
+        $implementation = new class () implements BadgeInterface {
+            public function getBadge(): string
             {
                 return self::SUCCESS;
             }
@@ -74,32 +80,37 @@ class BadgeInterfaceTest extends TestCase
         $this->assertSame('success', $implementation->getBadge());
     }
 
-    public function test_implementation_can_return_all_badge_types(): void
+    public function testImplementationCanReturnAllBadgeTypes(): void
     {
-        $reflection = new ReflectionClass(BadgeInterface::class);
+        $reflection = new \ReflectionClass(BadgeInterface::class);
         $constants = $reflection->getConstants();
 
         foreach ($constants as $constantName => $constantValue) {
-            $implementation = new class($constantValue) implements BadgeInterface {
+            $this->assertIsString($constantValue, "Badge constant {$constantName} must be a string");
+            $implementation = new class ($constantValue) implements BadgeInterface {
                 public function __construct(
-                    private readonly string $badge
-                ) {}
+                    private readonly string $badge,
+                ) {
+                }
 
-                public function getBadge(): string 
+                public function getBadge(): string
                 {
                     return $this->badge;
                 }
             };
 
-            $this->assertSame($constantValue, $implementation->getBadge(), 
-                "Implementation should be able to return {$constantName} ({$constantValue})");
+            $this->assertSame(
+                $constantValue,
+                $implementation->getBadge(),
+                "Implementation should be able to return {$constantName} ({$constantValue})"
+            );
         }
     }
 
-    public function test_implementation_with_empty_string(): void
+    public function testImplementationWithEmptyString(): void
     {
-        $implementation = new class implements BadgeInterface {
-            public function getBadge(): string 
+        $implementation = new class () implements BadgeInterface {
+            public function getBadge(): string
             {
                 return '';
             }
@@ -108,16 +119,17 @@ class BadgeInterfaceTest extends TestCase
         $this->assertSame('', $implementation->getBadge());
     }
 
-    public function test_implementation_with_custom_badge(): void
+    public function testImplementationWithCustomBadge(): void
     {
         $customBadge = 'custom-badge-type';
-        
-        $implementation = new class($customBadge) implements BadgeInterface {
-            public function __construct(
-                private readonly string $badge
-            ) {}
 
-            public function getBadge(): string 
+        $implementation = new class ($customBadge) implements BadgeInterface {
+            public function __construct(
+                private readonly string $badge,
+            ) {
+            }
+
+            public function getBadge(): string
             {
                 return $this->badge;
             }
@@ -126,31 +138,42 @@ class BadgeInterfaceTest extends TestCase
         $this->assertSame($customBadge, $implementation->getBadge());
     }
 
-    public function test_constants_follow_naming_convention(): void
+    public function testConstantsFollowNamingConvention(): void
     {
-        $reflection = new ReflectionClass(BadgeInterface::class);
+        $reflection = new \ReflectionClass(BadgeInterface::class);
         $constantNames = array_keys($reflection->getConstants());
 
         foreach ($constantNames as $constantName) {
             // 常量名应该全大写，用下划线分隔
-            $this->assertMatchesRegularExpression('/^[A-Z_]+$/', $constantName, 
-                "Constant {$constantName} should follow UPPER_CASE naming convention");
+            $this->assertMatchesRegularExpression(
+                '/^[A-Z_]+$/',
+                $constantName,
+                "Constant {$constantName} should follow UPPER_CASE naming convention"
+            );
         }
     }
 
-    public function test_constant_values_are_valid_css_classes(): void
+    public function testConstantValuesAreValidCssClasses(): void
     {
-        $reflection = new ReflectionClass(BadgeInterface::class);
+        $reflection = new \ReflectionClass(BadgeInterface::class);
         $constants = $reflection->getConstants();
 
         foreach ($constants as $constantName => $constantValue) {
+            $this->assertIsString($constantValue, "Badge constant {$constantName} must be a string");
+
             // CSS 类名应该只包含字母、数字、连字符
-            $this->assertMatchesRegularExpression('/^[a-zA-Z0-9-]+$/', $constantValue,
-                "Constant {$constantName} value '{$constantValue}' should be a valid CSS class name");
-            
+            $this->assertMatchesRegularExpression(
+                '/^[a-zA-Z0-9-]+$/',
+                $constantValue,
+                "Constant {$constantName} value '{$constantValue}' should be a valid CSS class name"
+            );
+
             // 不应该包含空格
-            $this->assertStringNotContainsString(' ', $constantValue,
-                "Constant {$constantName} value should not contain spaces");
+            $this->assertStringNotContainsString(
+                ' ',
+                $constantValue,
+                "Constant {$constantName} value should not contain spaces"
+            );
         }
     }
-} 
+}

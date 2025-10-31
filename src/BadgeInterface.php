@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra;
 
 /**
@@ -7,15 +9,15 @@ namespace Tourze\EnumExtra;
  */
 interface BadgeInterface
 {
-    const SUCCESS = 'success';
-    const WARNING = 'warning';
-    const DANGER = 'danger';
-    const INFO = 'info';
-    const PRIMARY = 'primary';
-    const SECONDARY = 'secondary';
-    const LIGHT = 'light';
-    const DARK = 'dark';
-    const OUTLINE = 'outline';
+    public const SUCCESS = 'success';
+    public const WARNING = 'warning';
+    public const DANGER = 'danger';
+    public const INFO = 'info';
+    public const PRIMARY = 'primary';
+    public const SECONDARY = 'secondary';
+    public const LIGHT = 'light';
+    public const DARK = 'dark';
+    public const OUTLINE = 'outline';
 
     public function getBadge(): string;
 }

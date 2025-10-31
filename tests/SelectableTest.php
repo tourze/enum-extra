@@ -1,11 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\EnumExtra\BoolEnum;
+use Tourze\EnumExtra\Selectable;
 
-class SelectableTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Selectable::class)]
+final class SelectableTest extends TestCase
 {
     public function testGenOptions(): void
     {
@@ -30,7 +38,7 @@ class SelectableTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptions, TestStatusEnum::genOptions());
+        $this->assertSame($expectedOptions, TestStatusEnum::genOptions());
     }
 
     public function testBoolEnumGenOptions(): void
@@ -52,7 +60,7 @@ class SelectableTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptions, BoolEnum::genOptions());
+        $this->assertSame($expectedOptions, BoolEnum::genOptions());
     }
 
     public function testBoolEnumGenBoolOptions(): void
@@ -74,6 +82,6 @@ class SelectableTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptions, BoolEnum::genBoolOptions());
+        $this->assertSame($expectedOptions, BoolEnum::genBoolOptions());
     }
 }

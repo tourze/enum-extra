@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra;
 
 enum BoolEnum: int implements Labelable, Itemable, Selectable
@@ -20,7 +22,7 @@ enum BoolEnum: int implements Labelable, Itemable, Selectable
 
     public function toBool(): bool
     {
-        return $this->value === 1;
+        return 1 === $this->value;
     }
 
     public function getStatus(): string
@@ -31,6 +33,9 @@ enum BoolEnum: int implements Labelable, Itemable, Selectable
         };
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSelectItem(): array
     {
         return [
@@ -44,6 +49,7 @@ enum BoolEnum: int implements Labelable, Itemable, Selectable
 
     /**
      * 生成布尔值选项列表
+     * @return array<int, array<string, mixed>>
      */
     public static function genBoolOptions(): array
     {

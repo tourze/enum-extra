@@ -18,6 +18,7 @@ A PHP package that enhances PHP 8.1+ enums with additional functionality, provid
 - Boolean enum implementation with useful helpers
 - Tree data structure support for hierarchical data
 - Data fetcher interfaces for standardized data retrieval
+- Badge interface for EasyAdminBundle integration
 
 ## Requirements
 
@@ -121,6 +122,27 @@ interface TreeDataFetcher
 }
 ```
 
+### BadgeInterface
+
+This interface provides badge constants for EasyAdminBundle integration.
+
+```php
+interface BadgeInterface
+{
+    public const SUCCESS = 'success';
+    public const WARNING = 'warning';
+    public const DANGER = 'danger';
+    public const INFO = 'info';
+    public const PRIMARY = 'primary';
+    public const SECONDARY = 'secondary';
+    public const LIGHT = 'light';
+    public const DARK = 'dark';
+    public const OUTLINE = 'outline';
+
+    public function getBadge(): string;
+}
+```
+
 ## Features in Detail
 
 ### Select Options Generation
@@ -162,6 +184,39 @@ Convert enum cases to array format for easy serialization:
 ```php
 $array = Status::ACTIVE->toArray();
 // Result: ['value' => 'active', 'label' => 'Active']
+```
+
+### Badge Integration
+
+Use badge interface for EasyAdminBundle styling:
+
+```php
+use Tourze\EnumExtra\BadgeInterface;
+
+enum UserStatus: string implements BadgeInterface, Labelable
+{
+    case ACTIVE = 'active';
+    case INACTIVE = 'inactive';
+    case BANNED = 'banned';
+
+    public function getLabel(): string
+    {
+        return match($this) {
+            self::ACTIVE => 'Active',
+            self::INACTIVE => 'Inactive',
+            self::BANNED => 'Banned',
+        };
+    }
+
+    public function getBadge(): string
+    {
+        return match($this) {
+            self::ACTIVE => self::SUCCESS,
+            self::INACTIVE => self::WARNING,
+            self::BANNED => self::DANGER,
+        };
+    }
+}
 ```
 
 ## Contributing

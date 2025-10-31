@@ -1,15 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\EnumExtra\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Tourze\EnumExtra\SelectTrait;
 
-class EnvironmentFilterTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(SelectTrait::class)]
+final class EnvironmentFilterTest extends TestCase
 {
+    /** @var array<string, mixed> */
     private array $originalEnv;
 
     protected function setUp(): void
     {
+        parent::setUp();
+        /** @var array<string, mixed> $_ENV */
         $this->originalEnv = $_ENV;
     }
 
